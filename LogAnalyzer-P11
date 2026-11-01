@@ -1,0 +1,22 @@
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.io.*;
+public class LogAnalyzer {
+ public static void main(String[] args) throws Exception {
+ Path dir=Path.of("sample-logs"); Files.createDirectories(dir);
+ Files.writeString(dir.resolve("one.log"),"INFO started\\nERROR disk\\nINFO ready\\n");
+ Files.writeString(dir.resolve("two.log"),"WARN memory\\nERROR network\\n");
+ int lines=0, matches=0; String keyword="ERROR";
+ try(DirectoryStream<Path> files=Files.newDirectoryStream(dir,"*.log")) {
+ for(Path p:files) {
+ int fileLines=0;
+ for(String line:Files.readAllLines(p)){lines++;fileLines++;if(line.contains(
+keyword))matches++;}
+ BasicFileAttributes a=Files.readAttributes(p,BasicFileAttributes.class);
+ System.out.println(p.getFileName()+": "+fileLines+" lines, "+a.size()+" bytes");
+ }
+ }
+ System.out.println("Total lines: "+lines);
+ System.out.println("Keyword matches: "+matches);
+ }
+}
