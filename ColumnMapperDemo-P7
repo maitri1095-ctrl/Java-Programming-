@@ -1,0 +1,26 @@
+import java.lang.annotation.*;
+import java.lang.reflect.*;
+@Retention(RetentionPolicy.RUNTIME) @Target(ElementType.FIELD) @interface Column { String name(); }
+class PersonRow {
+ @Column(name="name") String name;
+ @Column(name="age") int age;
+ public String toString(){return name+" ("+age+")";}
+}
+public class ColumnMapperDemo {
+ static PersonRow map(String[] header, String[] row) throws Exception {
+ PersonRow p=new PersonRow();
+ for(Field f:PersonRow.class.getDeclaredFields()) {
+ if(!f.isAnnotationPresent(Column.class)) continue;
+ String wanted=f.getAnnotation(Column.class).name(); int idx=-1;
+ for(int i=0;i<header.length;i++) if(header[i].equals(wanted)) idx=i;
+ if(idx<0 || idx>=row.length) continue; // missing column keeps default value
+ f.setAccessible(true);
+ if(f.getType()==int.class) f.setInt(p,Integer.parseInt(row[idx]));
+ else f.set(p,row[idx]);
+ }
+ return p;
+ }
+ public static void main(String[] args) throws Exception {
+ System.out.println(map(new String[]{"age","name"},new String[]{"21","Maitri"}));
+ }
+}
