@@ -1,0 +1,24 @@
+public class DeadlockDemo {
+ static final Object lock1 = new Object();
+ static final Object lock2 = new Object();
+ public static void main(String[] args) {
+ Thread thread1 = new Thread(() -> {
+ synchronized (lock1) {
+ System.out.println("Thread 1 locked lock1");
+ synchronized (lock2) {
+ System.out.println("Thread 1 locked lock2");
+ }
+ }
+ });
+ Thread thread2 = new Thread(() -> {
+ synchronized (lock1) {
+ System.out.println("Thread 2 locked lock1");
+ synchronized (lock2) {
+ System.out.println("Thread 2 locked lock2");
+ }
+ }
+ });
+ thread1.start();
+ thread2.start();
+ }
+}
