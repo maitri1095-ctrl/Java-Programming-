@@ -1,0 +1,21 @@
+abstract class Media {
+    String title; int lateDays;
+    Media(String title, int lateDays) { this.title=title; this.lateDays=lateDays; }
+    abstract double lateFee();
+}
+class Book extends Media {
+    Book(String t,int d){super(t,d);} double lateFee(){return lateDays*2.0;}
+}
+class DVD extends Media {
+    DVD(String t,int d){super(t,d);} double lateFee(){return lateDays*5.0;}
+}
+class Magazine extends Media {
+    Magazine(String t,int d){super(t,d);} double lateFee(){return lateDays*1.5;}
+}
+public class MediaFeeDemo {
+    public static void main(String[] args) {
+        Media[] items = {new Book("Java",3), new DVD("Film",2), new Magazine("Science",4)};
+        double total=0;
+        for(Media m:items){System.out.println(m.title+" fee: "+m.lateFee()); total+=m.lateFee();}        System.out.println("Total fees: "+total);
+    }
+}
