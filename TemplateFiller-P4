@@ -1,0 +1,37 @@
+import java.util.regex.*;
+
+public class TemplateFiller {
+    public static void main(String[] args) {
+        String template =
+            "Dear {name}, order {id} ships {date}.";
+
+        String[] names = {"name", "id"};
+        String[] values = {"Riya", "A07"};
+
+        Matcher matcher = Pattern
+            .compile("\\{(\\w+)\\}")
+            .matcher(template);
+
+        StringBuilder result = new StringBuilder();
+
+        while (matcher.find()) {
+            String key = matcher.group(1);
+            String value = "[?]";
+
+            for (int i = 0; i < names.length; i++) {
+                if (names[i].equals(key)) {
+                    value = values[i];
+                }
+            }
+
+            matcher.appendReplacement(
+                result,
+                Matcher.quoteReplacement(value)
+            );
+        }
+
+        matcher.appendTail(result);
+
+        System.out.println(result);
+    }
+}
