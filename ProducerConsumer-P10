@@ -1,0 +1,52 @@
+import java.util.LinkedList;
+import java.util.Queue;
+public class ProducerConsumer {
+ static class Buffer {
+ private final Queue<Integer> queue = new LinkedList<>();
+ private final int capacity = 3;
+ synchronized void produce(int item) throws InterruptedException {
+ while (queue.size() == capacity) {
+ wait();
+ }
+ queue.add(item);
+ System.out.println("Produced: " + item);
+ notify();
+ }
+ synchronized int consume() throws InterruptedException {
+ while (queue.isEmpty()) {
+ wait();
+ }
+ int item = queue.remove();
+ System.out.println("Consumed: " + item);
+ notify();
+ return item;
+ }
+ }
+ public static void main(String[] args) throws InterruptedException {
+ Buffer buffer = new Buffer();
+ int numberOfItems = 10;
+ Thread producer = new Thread(() -> {
+ try {
+ for (int i = 1; i <= numberOfItems; i++) {
+ buffer.produce(i);
+ }
+ } catch (InterruptedException e) {
+ Thread.currentThread().interrupt();
+ }
+ });
+ Thread consumer = new Thread(() -> {
+ try {
+ for (int i = 1; i <= numberOfItems; i++) {
+ buffer.consume();
+ }
+ } catch (InterruptedException e) {
+ Thread.currentThread().interrupt();
+ }
+ });
+ producer.start();
+ consumer.start();
+ producer.join();
+ consumer.join();
+ System.out.println("Production and consumption completed.");
+ }
+}
