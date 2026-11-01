@@ -1,0 +1,28 @@
+import java.lang.annotation.*;
+import java.lang.reflect.*;
+import java.util.*;
+@Retention(RetentionPolicy.RUNTIME) @Target(ElementType.FIELD) @interface NotBlank {}
+@Retention(RetentionPolicy.RUNTIME) @Target(ElementType.FIELD) @interface MaxLength { int value(); }
+class SignupForm {
+ @NotBlank @MaxLength(20) String name;
+ @NotBlank String email;
+ SignupForm(String n,String e){name=n;email=e;}
+}
+public class FormValidatorDemo {
+ static List<String> validate(Object obj) throws IllegalAccessException {
+ List<String> errors = new ArrayList<>();
+ for(Field f:obj.getClass().getDeclaredFields()) {
+ f.setAccessible(true); Object v=f.get(obj);
+ if(f.isAnnotationPresent(NotBlank.class) && (v==null || v.toString().isBlank()))
+ errors.add(f.getName()+" must not be blank");
+ if(f.isAnnotationPresent(MaxLength.class) && v instanceof String s &&
+ s.length()>f.getAnnotation(MaxLength.class).value())
+ errors.add(f.getName()+" exceeds maximum length");
+ }
+ return errors;
+ }
+ public static void main(String[] args) throws Exception {
+ SignupForm form = new SignupForm("","averyveryveryverylongname@example.com");
+ System.out.println(validate(form));
+ }
+}
