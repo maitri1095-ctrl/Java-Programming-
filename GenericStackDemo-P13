@@ -1,0 +1,21 @@
+import java.util.*;
+class StackBox<T> {
+ private Object[] items; private int size=0;
+ StackBox(int capacity){items=new Object[capacity];}
+ void push(T item){if(size==items.length)throw new IllegalStateException("Stack full");items[
+size++]=item;}
+ @SuppressWarnings("unchecked") T pop(){
+CEUE203 - Object Oriented Programming | Part A only Page 2
+ if(size==0)throw new EmptyStackException();
+ T item=(T)items[--size];items[size]=null;return item;
+ }
+ boolean isEmpty(){return size==0;}
+}
+public class GenericStackDemo {
+ public static void main(String[] args) {
+ StackBox<String> words=new StackBox<>(3); words.push("Java"); words.push("OOP");
+ System.out.println(words.pop()); System.out.println(words.pop());
+ StackBox<Integer> nums=new StackBox<>(2); nums.push(10); System.out.println(nums.pop());
+ System.out.println("Empty: "+nums.isEmpty());
+ }
+}
