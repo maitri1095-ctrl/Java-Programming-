@@ -1,0 +1,26 @@
+import java.util.*;
+class Task {
+ private final String title;
+ Task(String title){if(title==null||title.isBlank())throw new IllegalArgumentException("Title 
+cannot be blank");this.title=title;}
+ String getTitle(){return title;}
+}
+class TaskService {
+ private final List<Task> tasks=new ArrayList<>();
+ void add(String title){tasks.add(new Task(title));}
+ int count(){return tasks.size();}
+ List<Task> all(){return List.copyOf(tasks);}
+ void perform(String action){
+ if(!action.equalsIgnoreCase("LIST")&&!action.equalsIgnoreCase("COUNT"))
+ throw new IllegalArgumentException("Invalid action: "+action);
+ }
+}
+public class Part14App {
+ public static void main(String[] args) {
+ TaskService service=new TaskService();
+ service.add("Finish Java practical"); service.add("Revise OOP");
+ System.out.println("Task count: "+service.count());
+ service.perform("LIST");
+ for(Task t:service.all())System.out.println("- "+t.getTitle());
+ }
+}
