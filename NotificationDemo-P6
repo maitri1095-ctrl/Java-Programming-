@@ -1,0 +1,18 @@
+@FunctionalInterface
+interfaceNotifier { void send(String msg); }
+interfaceUrgent {}
+classEmail implements Urgent {}
+classSMS {}
+publicclass NotificationDemo {
+publicstatic void main(String[] args) {
+Notifier email = msg -> System.out.println("Email: " + msg);
+Notifier sms = msg -> System.out.println("SMS: " + msg);
+Notifier[] senders = {email, sms};
+boolean[] urgent = {true, false};
+String msg = "Exam reminder";
+for(int i = 0; i < senders.length; i++) {
+senders[i].send(msg);
+if(urgent[i]) senders[i].send(msg);
+}
+}
+}
