@@ -1,0 +1,18 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+class TaskServiceTest {
+ @Test void addingTaskIncreasesCount() {
+ TaskService service=new TaskService();
+ service.add("Study Java");
+ assertEquals(1,service.count());
+ }
+ @Test void multipleTasksAreCounted() {
+ TaskService service=new TaskService();
+ service.add("One"); service.add("Two");
+ assertEquals(2,service.count());
+ }
+ @Test void invalidActionThrowsException() {
+ TaskService service=new TaskService();
+ assertThrows(IllegalArgumentException.class,()->service.perform("DELETE"));
+ }
+}
