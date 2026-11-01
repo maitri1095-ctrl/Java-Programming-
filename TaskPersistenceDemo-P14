@@ -1,0 +1,14 @@
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
+public class TaskPersistenceDemo {
+ public static void main(String[] args) throws IOException {
+ Path file=Path.of("tasks.txt");
+ List<String> tasks=List.of("Finish Java practical","Revise OOP");
+ Files.write(file,tasks);
+ List<String> loaded=Files.readAllLines(file);
+ System.out.println("Saved tasks: "+tasks.size());
+ System.out.println("Reloaded unchanged: "+tasks.equals(loaded));
+ System.out.println(loaded);
+ }
+}
