@@ -1,0 +1,17 @@
+public class Driver {
+    static String strength(String pw) {
+        int score = 0;
+        boolean length = pw.length() >= 8;
+        boolean upper = pw.matches(".*[A-Z].*");
+        boolean digit = pw.matches(".*[0-9].*");
+        boolean special = pw.matches(".*[^a-zA-Z0-9].*");
+        score += length ? 1 : 0; score += upper ? 1 : 0;
+        score += digit ? 1 : 0; score += special ? 1 : 0;
+        System.out.println(pw + " -> length=" + length + ", uppercase=" + upper +            ", digit=" + digit + ", special=" + special);
+        return score <= 1 ? "Weak" : score <= 3 ? "Medium" : "Strong";
+    }
+    public static void main(String[] args) {
+        for (String pw : new String[]{"abc", "Password1", "Abcd1234!"})
+            System.out.println("Strength: " + strength(pw));
+    }
+}
