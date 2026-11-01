@@ -1,0 +1,54 @@
+import java.util.*;
+class OutOfStockException extends Exception {
+ private int shortfall;
+ OutOfStockException(String message, int shortfall) {
+ super(message);
+ this.shortfall = shortfall;
+ }
+ int getShortfall() {
+ return shortfall;
+ }
+}
+class InvalidQuantityException extends Exception {
+ InvalidQuantityException(String message) {
+ super(message);
+ }
+}
+class Warehouse {
+ private Map<String, Integer> stock = new HashMap<>();
+ Warehouse() {
+ stock.put("Pen", 10);
+ stock.put("Book", 5);
+ stock.put("Bag", 2);
+ }
+ void issue(String item, int qty) throws OutOfStockException, InvalidQuantityException {
+ if (qty <= 0)
+ throw new InvalidQuantityException("Quantity must be greater than zero.");
+ int available = stock.getOrDefault(item, 0);
+ if (qty > available)
+ throw new OutOfStockException("Not enough stock for " + item + ". Shortfall: " + (qty -
+available), qty - available);
+ stock.put(item, available - qty);
+ System.out.println("Issued " + qty + " " + item + ".");
+ }
+}
+public class StockIssue {
+ public static void main(String[] args) {
+ Warehouse warehouse = new Warehouse();
+ String[][] requests = {
+ {"Pen", "4"},
+ {"Book", "8"},
+ {"Bag", "0"},
+ {"Bag", "1"}
+ };
+ for (String[] request : requests) {
+ try {
+ warehouse.issue(request[0], Integer.parseInt(request[1]));
+ } catch (OutOfStockException e) {
+ System.out.println("Out of stock: " + e.getMessage());
+ } catch (InvalidQuantityException e) {
+ System.out.println("Invalid quantity: " + e.getMessage());
+ }
+ }
+ }
+}
