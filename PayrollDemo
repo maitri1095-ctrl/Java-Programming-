@@ -24,3 +24,5 @@ public class PayrollDemo {
             total += e.monthlySalary();
             if (e instanceof Intern) System.out.println("Intern stipend applies.");
         }
+       System.out.println("Total payroll: " + total);    }
+}
