@@ -1,0 +1,27 @@
+class SeatBookingRace {
+ static int seatsLeft=5;
+ static int booked=0;
+ static void book() {
+ if (seatsLeft>0) {
+ try {
+ Thread.sleep(10);
+ } catch (Exception e) {
+ }
+ seatsLeft--;
+ booked++;
+ System.out.println(Thread.currentThread().getName() + " booked a 
+seat");
+ }
+ }
+ public static void main(String[] args) throws Exception {
+ Thread[] t = new Thread[10];
+ for (int i=0;i<10;i++) {
+ t[i]= new Thread(SeatBookingRace::book, "Thread-" +(i + 1));
+ t[i].start();
+ }
+ for (Thread x : t)
+ x.join();
+ System.out.println("Seats left = " + seatsLeft);
+ System.out.println("Successful bookings = " + booked);
+ }
+}
