@@ -1,0 +1,20 @@
+class Box<T> {
+ private T value; Box(T value){this.value=value;}
+ T get(){return value;} void set(T value){this.value=value;}
+}
+class Pair<A,B> {
+ private A first; private B second;
+ Pair(A first,B second){this.first=first;this.second=second;}
+ public String toString(){return "("+first+", "+second+")";}
+}
+public class GenericDemo {
+ static <T> T first(T[] values){if(values.length==0)throw new IllegalArgumentException("Empty 
+array");return values[0];}
+ public static void main(String[] args) {
+ Box<String> text=new Box<>("Hello"); Box<Integer> number=new Box<>(25);
+ Pair<String,Integer> pair=new Pair<>("Age",20);
+ System.out.println(text.get()); System.out.println(number.get());
+ System.out.println(pair);
+ System.out.println("First: "+first(new String[]{"Java","Python"}));
+ }
+}
