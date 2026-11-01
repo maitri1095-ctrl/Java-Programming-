@@ -1,0 +1,20 @@
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.io.*;
+public class FolderTreeReport {
+ public static void main(String[] args) throws Exception {
+ Path root=Path.of("sample-logs"); Files.createDirectories(root);
+ Path report=Path.of("folder-report.txt");
+ try(BufferedWriter out=Files.newBufferedWriter(report)) {
+ Files.walkFileTree(root,new SimpleFileVisitor<>() {
+ public FileVisitResult visitFile(Path file,BasicFileAttributes attrs) throws 
+IOException {
+ out.write(file.getFileName()+" | "+attrs.size()+" bytes | "+attrs.
+lastModifiedTime());
+ out.newLine(); return FileVisitResult.CONTINUE;
+ }
+ });
+ }
+ System.out.println(Files.readString(report));
+ }
+}
