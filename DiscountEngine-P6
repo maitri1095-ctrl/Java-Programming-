@@ -1,0 +1,14 @@
+package discount;
+import java.util.*;
+interfaceRule{double apply(double price); }
+publicclass DiscountEngine {
+publicstaticvoidmain(String[] args) {
+Scannersc=new Scanner(System.in); List<Double>prices
+= Arrays.asList(100.0, 250.0, 500.0); System.out.println("1.
+10% discount"); System.out.println("2. 20% discount");
+intch=sc.nextInt();
+Rulerule=ch== 1 ? p -> p * 0.90 : p -> p * 0.80;
+for(doubleprice : prices)
+System.out.println(price + " -> " + rule.apply(price));
+}
+}
