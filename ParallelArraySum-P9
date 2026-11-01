@@ -1,0 +1,43 @@
+import java.util.*;
+class ParallelArraySum {
+ static long total =0;
+ static void wrongSum(int[] a, int start, int end) {
+ for (int i=start;i<end;i++)
+ total +=a[i];
+ }
+ static synchronized void add(long value) {
+ total +=value;
+ }
+ public static void main(String[] args) throws Exception {
+ int n = 1000000;
+ int[] a = new int[n];
+ Arrays.fill(a, 1);
+ Thread[] t = new Thread[4];
+ total = 0;
+ for (int k=0;k<4;k++) {
+ int s = k*n/4;
+ int e = (k+1)*n/4;
+ t[k] = new Thread(() -> wrongSum(a, s, e));
+ t[k].start();
+ }
+ for (Thread x : t)
+ x.join();
+ System.out.println("Wrong shared total = " + total);
+ total = 0;
+ for (int k=0;k<4;k++) {
+ int s = k*n/4;
+ int e = (k+1)*n/4;
+ t[k] = new Thread(() -> {
+ long part = 0;
+ for (int i=s;i<e;i++)
+ part +=a[i];
+ add(part);
+ });
+ t[k].start();
+ }
+ for (Thread x : t)
+ x.join();
+ System.out.println("Synchronized total = " + total);
+ System.out.println("Expected total = " + n);
+ }
+}
