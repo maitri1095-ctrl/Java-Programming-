@@ -1,0 +1,21 @@
+import java.io.*;
+import java.nio.file.*;
+import java.util.Arrays;
+class StudentRecord implements Serializable {
+ private static final long serialVersionUID=1L;
+ String name; int roll; transient String sessionToken;
+ StudentRecord(String n,int r,String t){name=n;roll=r;sessionToken=t;}
+ public String toString(){return name+" "+roll+" token="+sessionToken;}
+}
+public class SaveLoadDemo {
+ public static void main(String[] args) throws Exception {
+ StudentRecord[] students={new StudentRecord("Maitri",39,"XYZ")};
+ Path file=Path.of("students.dat");
+ try(ObjectOutputStream out=new ObjectOutputStream(Files.newOutputStream(file))){out.
+writeObject(students);}
+ try(ObjectInputStream in=new ObjectInputStream(Files.newInputStream(file))){
+ StudentRecord[] loaded=(StudentRecord[])in.readObject();
+ System.out.println(Arrays.toString(loaded));
+ }
+ }
+}
