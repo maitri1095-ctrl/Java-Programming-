@@ -1,0 +1,10 @@
+import java.util.*;
+public class UniqueVisitors {
+ public static void main(String[] args) {
+ List<String> logins=List.of("riya","amit","riya","neha","dev","amit","kavya");
+ Set<String> unique=new HashSet<>(logins);
+ LinkedHashSet<String> ordered=new LinkedHashSet<>(logins);
+ System.out.println("Unique count: "+unique.size());
+ System.out.println("First three: "+ordered.stream().limit(3).toList());
+ }
+}
